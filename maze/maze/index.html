@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Maze</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, minimal-ui">
+  <link rel="stylesheet" href="css/main.css" />
+  <script src="js/phaser.min.js"></script>
+  <script src="js/detect.js"></script>
+  <script src="js/desktop.begin.js"></script>
+  <script src="js/desktop.game.js"></script>
+  <script src="js/preload.js"></script>
+  <script src="js/functions.js"></script>
+  <script src="js/desktop.end.js"></script>
+</head>
+
+<body>
+  <div class="modal_window">
+    <div class="modal_window_container">
+      <div class="input">
+        <input type="number" id="width">
+        <label for="width">Width</label>
+      </div>
+      <div class="input">
+        <input type="number" id="height">
+        <label for="height">Height</label>
+      </div>
+      <button onclick="submitForm()">Send</button>
+    </div>
+  </div>
+
+<script>
+  function submitForm() {
+    let width = document.body.querySelector('#width').value;
+    let height = document.body.querySelector('#height').value;
+    
+    if (!width || !height) {
+        alert('Заполните все поля');
+    } else {
+        var request = new XMLHttpRequest();
+        function reqReadyStateChange() {
+            if (request.readyState == 4) {
+                var status = request.status;
+                if (status == 200) {
+                    console.log(request.responseText);
+                }
+            }
+        }
+
+        let modal = document.body.querySelector('.modal_window');
+        modal.remove();
+
+        request.open("GET", `maze/orthogonal&width=${width}&height=${height}`);
+        request.onreadystatechange = reqReadyStateChange;
+        request.send();
+    }
+  }
+</script>
+</body>
+
+</html>
